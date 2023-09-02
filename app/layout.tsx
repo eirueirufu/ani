@@ -15,8 +15,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en' className='dark'>
-      <Nav />
-      <Providers>{children}</Providers>
+      <body>
+        <Providers>
+          <Nav />
+          {children}
+        </Providers>
+      </body>
     </html>
   );
 }
