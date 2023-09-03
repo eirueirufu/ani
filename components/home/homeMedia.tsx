@@ -20,6 +20,7 @@ export default function HomeMedia(props: {
               key={index}
               shadow='sm'
               isPressable
+              isHoverable
               onClick={() => {
                 router.push(
                   `/media/${item.id}?type=${item.type}&isAdult=${item.isAdult}`

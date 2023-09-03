@@ -20,54 +20,56 @@ export default function HomeMediaRank(props: {
               <p className='text-center text-2xl font-bold w-12'>
                 #{index + 1}
               </p>
-              <Card className='flex flex-1 flex-row gap-1' isPressable>
-                <Image
-                  key={index}
-                  alt={item.title.native}
-                  src={item.coverImage.extraLarge}
-                  width={52}
-                  height={52}
-                  className='p-2 object-cover shrink-0'
-                  onClick={() => {
-                    router.push(
-                      `/media/${item.id}?type=${item.type}&isAdult=${item.isAdult}`
-                    );
-                  }}
-                />
-                <div className='flex flex-col justify-center gap-1 shrink-0 flex-1 overflow-hidden'>
-                  <p className='text-ellipsis overflow-hidden whitespace-nowrap '>
-                    {item.title.native}
-                  </p>
-                  <div className='flex gap-2 overflow-auto'>
-                    {item.genres.map((genre, index) => {
-                      return (
-                        <Chip
-                          key={index}
-                          style={{
-                            backgroundColor: `${item.coverImage.color}`,
-                          }}
-                          size='sm'
-                          className='flex-shrink-0'
-                        >
-                          <p className='dark:mix-blend-difference'>{genre}</p>
-                        </Chip>
+              <Card className='w-full' isPressable isHoverable>
+                <CardBody className='p-0 flex flex-1 flex-row gap-1'>
+                  <Image
+                    key={index}
+                    alt={item.title.native}
+                    src={item.coverImage.extraLarge}
+                    width={52}
+                    height={52}
+                    className='p-2 object-cover shrink-0'
+                    onClick={() => {
+                      router.push(
+                        `/media/${item.id}?type=${item.type}&isAdult=${item.isAdult}`
                       );
-                    })}
-                  </div>
-                </div>
-                <div className='w-1/3 md:grid grid-cols-2 justify-start items-center gap-5 shrink-0 text-ellipsis overflow-hidden whitespace-nowrap mr-4 hidden '>
-                  <span>
-                    <div>{item.format}</div>
-                    <div>{item.episodes} episodes</div>
-                  </span>
-                  <span>
-                    <div>
-                      {item.seasonYear}&nbsp;
-                      {item.season}
+                    }}
+                  />
+                  <div className='flex flex-col justify-center gap-1 shrink-0 flex-1 overflow-hidden'>
+                    <p className='text-ellipsis overflow-hidden whitespace-nowrap '>
+                      {item.title.native}
+                    </p>
+                    <div className='flex gap-2 overflow-auto'>
+                      {item.genres.map((genre, index) => {
+                        return (
+                          <Chip
+                            key={index}
+                            style={{
+                              backgroundColor: `${item.coverImage.color}`,
+                            }}
+                            size='sm'
+                            className='flex-shrink-0'
+                          >
+                            <p className='dark:mix-blend-difference'>{genre}</p>
+                          </Chip>
+                        );
+                      })}
                     </div>
-                    <div>{item.status}</div>
-                  </span>
-                </div>
+                  </div>
+                  <div className='w-1/3 md:grid grid-cols-2 justify-start items-center gap-5 shrink-0 text-ellipsis overflow-hidden whitespace-nowrap mr-4 hidden '>
+                    <span>
+                      <div>{item.format}</div>
+                      <div>{item.episodes} episodes</div>
+                    </span>
+                    <span>
+                      <div>
+                        {item.seasonYear}&nbsp;
+                        {item.season}
+                      </div>
+                      <div>{item.status}</div>
+                    </span>
+                  </div>
+                </CardBody>
               </Card>
             </div>
           );
