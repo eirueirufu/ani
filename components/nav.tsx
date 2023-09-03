@@ -9,6 +9,7 @@ import {
   Link,
   Button,
 } from "@nextui-org/react";
+import { ThemeSwitcher } from "./themeSwitcher";
 
 export default function Nav() {
   return (
@@ -35,6 +36,9 @@ export default function Nav() {
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify='end'>
+        <NavbarItem className='flex'>
+          <ThemeSwitcher />
+        </NavbarItem>
         <NavbarItem className='hidden lg:flex'>
           <Link href='#'>Login</Link>
         </NavbarItem>

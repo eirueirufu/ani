@@ -1,7 +1,6 @@
 import HomeMedia from "@/components/home/homeMedia";
 import HomeMediaRank from "@/components/home/homeMediaRank";
 import { getHome } from "@/lib/aniList/home";
-import { gql, useQuery } from "@apollo/client";
 
 export default async function Home() {
   const data = await getHome();
