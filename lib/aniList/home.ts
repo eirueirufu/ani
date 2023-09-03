@@ -3,6 +3,28 @@ import { cache } from "react";
 
 export const revalidate = 3600; // revalidate the data at most every hour
 
+export const getHome = cache(async () => {
+  const client = new ApolloClient({
+    uri: "https://graphql.anilist.co",
+    cache: new InMemoryCache(),
+    ssrMode: true,
+  });
+  const resp = await client.query<Home>({
+    query: GET_HOME,
+    variables: {
+      type: "ANIME",
+      season: "SUMMER",
+      seasonYear: 2023,
+      nextSeason: "FALL",
+      nextYear: 2023,
+    },
+  });
+  if (resp.error) {
+    throw resp.error;
+  }
+  return resp.data;
+});
+
 const GET_HOME = gql`
   query GetHome(
     $season: MediaSeason
@@ -52,6 +74,7 @@ const GET_HOME = gql`
     id
     title {
       userPreferred
+      native
     }
     coverImage {
       extraLarge
@@ -104,21 +127,73 @@ const GET_HOME = gql`
   }
 `;
 
-export const getHome = cache(async () => {
-  const client = new ApolloClient({
-    uri: "https://graphql.anilist.co",
-    cache: new InMemoryCache(),
-    ssrMode: true,
-  });
-  const data = await client.query({
-    query: GET_HOME,
-    variables: {
-      type: "ANIME",
-      season: "SUMMER",
-      seasonYear: 2023,
-      nextSeason: "FALL",
-      nextYear: 2023,
-    },
-  });
-  return data;
-});
+export type Home = {
+  trending: {
+    media: Array<Media>;
+  };
+  season: {
+    media: Array<Media>;
+  };
+  nextSeason: {
+    media: Array<Media>;
+  };
+  popular: {
+    media: Array<Media>;
+  };
+  top: {
+    media: Array<Media>;
+  };
+};
+
+export type Media = {
+  id: number;
+  title: {
+    userPreferred: string;
+    native: string;
+  };
+  coverImage: {
+    extraLarge: string;
+    large: string;
+    color: string;
+  };
+  startDate: {
+    year: number;
+    month: number;
+    day: number;
+  };
+  endDate: {
+    year?: number;
+    month?: number;
+    day?: number;
+  };
+  bannerImage: string;
+  season: string;
+  seasonYear: number;
+  description: string;
+  type: string;
+  format: string;
+  status: string;
+  episodes?: number;
+  duration: number;
+  chapters: any;
+  volumes: any;
+  genres: Array<string>;
+  isAdult: boolean;
+  averageScore: number;
+  popularity: number;
+  mediaListEntry: any;
+  nextAiringEpisode: {
+    airingAt: number;
+    timeUntilAiring: number;
+    episode: number;
+  };
+  studios: {
+    edges: Array<{
+      isMain: boolean;
+      node: {
+        id: number;
+        name: string;
+      };
+    }>;
+  };
+};
