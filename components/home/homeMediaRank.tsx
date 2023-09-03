@@ -20,7 +20,16 @@ export default function HomeMediaRank(props: {
               <p className='text-center text-2xl font-bold w-12'>
                 #{index + 1}
               </p>
-              <Card className='w-full' isPressable isHoverable>
+              <Card
+                className='w-full'
+                isPressable
+                isHoverable
+                onClick={() => {
+                  router.push(
+                    `/media/${item.id}?type=${item.type}&isAdult=${item.isAdult}`
+                  );
+                }}
+              >
                 <CardBody className='p-0 flex flex-1 flex-row gap-1'>
                   <Image
                     key={index}
@@ -29,11 +38,6 @@ export default function HomeMediaRank(props: {
                     width={52}
                     height={52}
                     className='p-2 object-cover shrink-0'
-                    onClick={() => {
-                      router.push(
-                        `/media/${item.id}?type=${item.type}&isAdult=${item.isAdult}`
-                      );
-                    }}
                   />
                   <div className='flex flex-col justify-center gap-1 shrink-0 flex-1 overflow-hidden'>
                     <p className='text-ellipsis overflow-hidden whitespace-nowrap '>
