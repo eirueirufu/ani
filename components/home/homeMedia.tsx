@@ -10,18 +10,18 @@ export default function HomeMedia(props: {
   return (
     <div className='container mx-auto max-w-6xl p-3'>
       <h1 className='font-bold text-2xl my-3'>{props.title}</h1>
-      <div className='flex justify-between flex-wrap'>
+      <div className='grid grid-cols-3 md:grid-cols-6 gap-3'>
         {props.media.map((item, index) => {
           return (
-            <Card key={index} shadow='sm' isPressable className='w-44'>
+            <Card key={index} shadow='sm' isPressable>
               <CardBody className='p-0'>
                 <Image
                   key={index}
                   alt={item.title.native}
                   src={item.coverImage.extraLarge}
-                  className='w-44 h-52 object-cover'
+                  className='object-cover'
                 />
-                <p className='text-small font-bold my-auto text-center p-3'>
+                <p className='text-xs md:text-sm font-bold my-auto text-center p-3'>
                   {item.title.native}
                 </p>
               </CardBody>
