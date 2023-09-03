@@ -11,9 +11,9 @@ import {
 } from "@nextui-org/react";
 import { ThemeSwitcher } from "./themeSwitcher";
 
-export default function Nav() {
+export default function Nav({ className }: React.HTMLAttributes<"div">) {
   return (
-    <Navbar>
+    <Navbar isBordered className={className}>
       <NavbarBrand>
         <AcmeLogo />
         <p className='font-bold text-inherit'>ACME</p>
