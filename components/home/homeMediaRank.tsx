@@ -41,7 +41,7 @@ export default function HomeMediaRank(props: {
                           size='sm'
                           className='flex-shrink-0'
                         >
-                          <p className='mix-blend-difference'>{genre}</p>
+                          <p className='dark:mix-blend-difference'>{genre}</p>
                         </Chip>
                       );
                     })}
