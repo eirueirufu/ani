@@ -1,10 +1,12 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import React from "react";
 
-export default function PageLoading() {
+export default function Loading({ className }: React.HTMLAttributes<"div">) {
   return (
-    <div className='w-screen h-screen flex justify-center items-center'>
+    <div className={cn("flex justify-center items-center", className)}>
       <div className='flex gap-1'>
         <motion.div
           animate={{ scale: [1, 1.4, 1] }}

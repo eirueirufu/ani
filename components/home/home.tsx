@@ -7,6 +7,7 @@ import { Card, CardBody, Image } from "@nextui-org/react";
 import { getDate } from "@/lib/utils";
 import { TopMediaItem } from "./topMediaItem";
 import { MediaItem } from "./mediaItem";
+import Loading from "../loading";
 
 export const GetHome = graphql(/* GraphQL */ `
   query GetHome(

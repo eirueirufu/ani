@@ -4,7 +4,7 @@ import { useQuery } from "@apollo/client";
 import { GET_MEDIA, Media } from "@/lib/aniList/media";
 import { Image } from "@nextui-org/react";
 import { useSearchParams } from "next/navigation";
-import PageLoading from "@/components/pageLoading";
+import Loading from "@/components/loading";
 
 export default function Media(props: { id: number }) {
   const searchParams = useSearchParams();
@@ -17,7 +17,7 @@ export default function Media(props: { id: number }) {
     },
   });
   if (loading) {
-    return <PageLoading />;
+    return <Loading className='w-screen h-screen' />;
   }
   if (error) {
     throw error;
