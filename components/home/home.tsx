@@ -4,10 +4,12 @@ import { graphql, useFragment, FragmentType } from "@/lib/aniList";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@apollo/client";
 import { Card, CardBody, Image } from "@nextui-org/react";
-import { getDate } from "@/lib/utils";
+import { getMediaDate } from "@/lib/utils";
 import { TopMediaItem } from "./topMediaItem";
 import { MediaItem } from "./mediaItem";
 import Loading from "../loading";
+import { useState } from "react";
+import Link from "next/link";
 
 export const GetHome = graphql(/* GraphQL */ `
   query GetHome(
@@ -115,14 +117,13 @@ export const HomeMedia = graphql(/* GraphQL */ `
 `);
 
 export default function Home() {
-  console.log(getDate());
-  const [season, year, nextSeason, nextYear] = getDate();
+  const mediaDate = getMediaDate();
   const { loading, error, data } = useQuery(GetHome, {
     variables: {
-      season: season,
-      seasonYear: year,
-      nextSeason: nextSeason,
-      nextYear: nextYear,
+      season: mediaDate.Season,
+      seasonYear: mediaDate.SeasonYear,
+      nextSeason: mediaDate.NextSeason,
+      nextYear: mediaDate.NextYear,
     },
   });
   if (error) {
@@ -133,7 +134,12 @@ export default function Home() {
     <>
       <div className='flex flex-col items-center justify-center'>
         <div className='container mx-auto max-w-6xl p-3'>
-          <h1 className='font-bold text-2xl my-3'>TRENDING NOW</h1>
+          <div className='flex justify-between items-center'>
+            <h1 className='font-bold text-2xl my-3'>TRENDING NOW</h1>
+            <Link href={"#"}>
+              <p className='font-bold text-xs'>VLEW ALL →</p>
+            </Link>
+          </div>
           <div className='grid grid-cols-3 md:grid-cols-6 gap-3'>
             {data?.trending?.media?.map((item, index) => {
               if (!item) {

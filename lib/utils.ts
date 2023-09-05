@@ -6,7 +6,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getDate(): [MediaSeason, number, MediaSeason, number] {
+export interface MediaDate {
+  Season: MediaSeason;
+  SeasonYear: number;
+  NextSeason: MediaSeason;
+  NextYear: number;
+}
+
+export function getMediaDate(): MediaDate {
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth();
@@ -16,7 +23,12 @@ export function getDate(): [MediaSeason, number, MediaSeason, number] {
   if (nextSeason == MediaSeason.Winter) {
     nextYear = year + 1;
   }
-  return [season, year, nextSeason, nextYear];
+  return {
+    Season: season,
+    SeasonYear: year,
+    NextSeason: nextSeason,
+    NextYear: nextYear,
+  };
 }
 
 export function getSeason(month: number) {
