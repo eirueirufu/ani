@@ -311,7 +311,7 @@ export default function Media(props: { id: number }) {
                       height={96}
                       className='object-cover'
                     />
-                    <p className='text-xs absolute bottom-0 bg-black/[.5] z-10 w-full text-center'>
+                    <p className='text-xs absolute bottom-0 dark:bg-black/[.5] bg-white/[.5] z-10 w-full text-center'>
                       {item?.relationType}
                     </p>
                   </CardBody>
