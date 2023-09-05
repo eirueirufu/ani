@@ -1,14 +1,14 @@
 "use client";
 
-import Nav from "@/components/nav";
 import { graphql, useFragment, FragmentType } from "@/lib/aniList";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useQuery } from "@apollo/client";
-import { MediaSeason } from "@/lib/aniList/graphql";
-import PageLoading from "../pageLoading";
 import { Card, CardBody, Image } from "@nextui-org/react";
+import { getDate } from "@/lib/utils";
+import { TopMediaItem } from "./topMediaItem";
+import { MediaItem } from "./mediaItem";
 
-export const getHome = graphql(/* GraphQL */ `
+export const GetHome = graphql(/* GraphQL */ `
   query GetHome(
     $season: MediaSeason
     $seasonYear: Int
@@ -55,7 +55,7 @@ export const getHome = graphql(/* GraphQL */ `
   }
 `);
 
-export const Media = graphql(`
+export const HomeMedia = graphql(/* GraphQL */ `
   fragment media on Media {
     id
     title {
@@ -114,31 +114,25 @@ export const Media = graphql(`
 `);
 
 export default function Home() {
-  const searchParams = useSearchParams();
-
-  const { loading, error, data } = useQuery(getHome, {
+  console.log(getDate());
+  const [season, year, nextSeason, nextYear] = getDate();
+  const { loading, error, data } = useQuery(GetHome, {
     variables: {
-      season: MediaSeason.Summer,
-      seasonYear: 2023,
-      nextSeason: MediaSeason.Fall,
-      nextYear: 2023,
+      season: season,
+      seasonYear: year,
+      nextSeason: nextSeason,
+      nextYear: nextYear,
     },
   });
-  if (loading) {
-    return <PageLoading />;
-  }
   if (error) {
     throw error;
-  }
-  if (!data) {
-    return <div>no data</div>;
   }
 
   return (
     <>
       <div className='flex flex-col items-center justify-center'>
         <div className='container mx-auto max-w-6xl p-3'>
-          <h1 className='font-bold text-2xl my-3'>当下流行</h1>
+          <h1 className='font-bold text-2xl my-3'>TRENDING NOW</h1>
           <div className='grid grid-cols-3 md:grid-cols-6 gap-3'>
             {data?.trending?.media?.map((item, index) => {
               if (!item) {
@@ -148,35 +142,51 @@ export default function Home() {
             })}
           </div>
         </div>
+        <div className='container mx-auto max-w-6xl p-3'>
+          <h1 className='font-bold text-2xl my-3'>THIS SEASON</h1>
+          <div className='grid grid-cols-3 md:grid-cols-6 gap-3'>
+            {data?.season?.media?.map((item, index) => {
+              if (!item) {
+                return;
+              }
+              return <MediaItem key={index} media={item} />;
+            })}
+          </div>
+        </div>
+        <div className='container mx-auto max-w-6xl p-3'>
+          <h1 className='font-bold text-2xl my-3'>COMING SOON</h1>
+          <div className='grid grid-cols-3 md:grid-cols-6 gap-3'>
+            {data?.nextSeason?.media?.map((item, index) => {
+              if (!item) {
+                return;
+              }
+              return <MediaItem key={index} media={item} />;
+            })}
+          </div>
+        </div>
+        <div className='container mx-auto max-w-6xl p-3'>
+          <h1 className='font-bold text-2xl my-3'>POPULAR</h1>
+          <div className='grid grid-cols-3 md:grid-cols-6 gap-3'>
+            {data?.popular?.media?.map((item, index) => {
+              if (!item) {
+                return;
+              }
+              return <MediaItem key={index} media={item} />;
+            })}
+          </div>
+        </div>
+        <div className='container mx-auto max-w-6xl p-3'>
+          <h1 className='font-bold text-2xl my-3'>TOP</h1>
+          <div className='flex flex-col'>
+            {data?.top?.media?.map((item, index) => {
+              if (!item) {
+                return;
+              }
+              return <TopMediaItem key={index} index={index} media={item} />;
+            })}
+          </div>
+        </div>
       </div>
     </>
-  );
-}
-
-function MediaItem(props: { media: FragmentType<typeof Media> }) {
-  const media = useFragment(Media, props.media);
-  const router = useRouter();
-  return (
-    <Card
-      shadow='sm'
-      isPressable
-      isHoverable
-      onClick={() => {
-        router.push(
-          `/media/${media.id}?type=${media.type}&isAdult=${media.isAdult}`
-        );
-      }}
-    >
-      <CardBody className='p-0'>
-        <Image
-          alt={media.title?.native ?? ""}
-          src={media.coverImage?.extraLarge ?? ""}
-          className='object-cover'
-        />
-        <p className='text-xs md:text-sm font-bold my-auto text-center p-3'>
-          {media.title?.native}
-        </p>
-      </CardBody>
-    </Card>
   );
 }
