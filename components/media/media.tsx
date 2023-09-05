@@ -1,8 +1,8 @@
 "use client";
 
 import { useQuery } from "@apollo/client";
-import { Image } from "@nextui-org/react";
-import { useSearchParams } from "next/navigation";
+import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { graphql, useFragment, FragmentType } from "@/lib/aniList";
 import { MediaType } from "@/lib/aniList/graphql";
 
@@ -242,6 +242,7 @@ export const GetMedia = graphql(/* GraphQL */ `
 
 export default function Media(props: { id: number }) {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const { loading, error, data } = useQuery(GetMedia, {
     variables: {
@@ -256,6 +257,7 @@ export default function Media(props: { id: number }) {
   if (error) {
     throw error;
   }
+
   return (
     <>
       <Image
@@ -281,6 +283,41 @@ export default function Media(props: { id: number }) {
                 __html: data?.Media?.description ?? "",
               }}
             />
+          </div>
+        </div>
+        <div>
+          <p>RELATIONS</p>
+          <div className='flex flex-wrap gap-3'>
+            {data?.Media?.relations?.edges?.map((item, index) => {
+              return (
+                <Card
+                  key={index}
+                  radius='none'
+                  isPressable
+                  isHoverable
+                  onClick={() => {
+                    router.push(
+                      `/media/${item?.node?.id}?type=${item?.node
+                        ?.type}&isAdult=${false}`
+                    );
+                  }}
+                >
+                  <CardBody className='p-0 relative'>
+                    <Image
+                      alt={item?.node?.title?.userPreferred ?? ""}
+                      src={item?.node?.coverImage?.large ?? ""}
+                      radius='none'
+                      width={52}
+                      height={96}
+                      className='object-cover'
+                    />
+                    <p className='text-xs absolute bottom-0 bg-black/[.5] z-10 w-full text-center'>
+                      {item?.relationType}
+                    </p>
+                  </CardBody>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </div>
