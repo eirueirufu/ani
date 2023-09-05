@@ -129,6 +129,9 @@ export default function Home() {
   if (error) {
     throw error;
   }
+  if (loading) {
+    return;
+  }
 
   return (
     <>
