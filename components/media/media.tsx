@@ -1,53 +1,285 @@
 "use client";
 
 import { useQuery } from "@apollo/client";
-import { GET_MEDIA, Media } from "@/lib/aniList/media";
 import { Image } from "@nextui-org/react";
 import { useSearchParams } from "next/navigation";
-import Loading from "@/components/loading";
+import { graphql, useFragment, FragmentType } from "@/lib/aniList";
+import { MediaType } from "@/lib/aniList/graphql";
+
+export const GetMedia = graphql(/* GraphQL */ `
+  query GetMedia($id: Int, $type: MediaType, $isAdult: Boolean) {
+    Media(id: $id, type: $type, isAdult: $isAdult) {
+      id
+      title {
+        userPreferred
+        romaji
+        english
+        native
+      }
+      coverImage {
+        extraLarge
+        large
+      }
+      bannerImage
+      startDate {
+        year
+        month
+        day
+      }
+      endDate {
+        year
+        month
+        day
+      }
+      description
+      season
+      seasonYear
+      type
+      format
+      status(version: 2)
+      episodes
+      duration
+      chapters
+      volumes
+      genres
+      synonyms
+      source(version: 3)
+      isAdult
+      isLocked
+      meanScore
+      averageScore
+      popularity
+      favourites
+      isFavouriteBlocked
+      hashtag
+      countryOfOrigin
+      isLicensed
+      isFavourite
+      isRecommendationBlocked
+      isFavouriteBlocked
+      isReviewBlocked
+      nextAiringEpisode {
+        airingAt
+        timeUntilAiring
+        episode
+      }
+      relations {
+        edges {
+          id
+          relationType(version: 2)
+          node {
+            id
+            title {
+              userPreferred
+            }
+            format
+            type
+            status(version: 2)
+            bannerImage
+            coverImage {
+              large
+            }
+          }
+        }
+      }
+      characterPreview: characters(perPage: 6, sort: [ROLE, RELEVANCE, ID]) {
+        edges {
+          id
+          role
+          name
+          voiceActors(language: JAPANESE, sort: [RELEVANCE, ID]) {
+            id
+            name {
+              userPreferred
+            }
+            language: languageV2
+            image {
+              large
+            }
+          }
+          node {
+            id
+            name {
+              userPreferred
+            }
+            image {
+              large
+            }
+          }
+        }
+      }
+      staffPreview: staff(perPage: 8, sort: [RELEVANCE, ID]) {
+        edges {
+          id
+          role
+          node {
+            id
+            name {
+              userPreferred
+            }
+            language: languageV2
+            image {
+              large
+            }
+          }
+        }
+      }
+      studios {
+        edges {
+          isMain
+          node {
+            id
+            name
+          }
+        }
+      }
+      reviewPreview: reviews(perPage: 2, sort: [RATING_DESC, ID]) {
+        pageInfo {
+          total
+        }
+        nodes {
+          id
+          summary
+          rating
+          ratingAmount
+          user {
+            id
+            name
+            avatar {
+              large
+            }
+          }
+        }
+      }
+      recommendations(perPage: 7, sort: [RATING_DESC, ID]) {
+        pageInfo {
+          total
+        }
+        nodes {
+          id
+          rating
+          userRating
+          mediaRecommendation {
+            id
+            title {
+              userPreferred
+            }
+            format
+            type
+            status(version: 2)
+            bannerImage
+            coverImage {
+              large
+            }
+          }
+          user {
+            id
+            name
+            avatar {
+              large
+            }
+          }
+        }
+      }
+      externalLinks {
+        id
+        site
+        url
+        type
+        language
+        color
+        icon
+        notes
+        isDisabled
+      }
+      streamingEpisodes {
+        site
+        title
+        thumbnail
+        url
+      }
+      trailer {
+        id
+        site
+      }
+      rankings {
+        id
+        rank
+        type
+        format
+        year
+        season
+        allTime
+        context
+      }
+      tags {
+        id
+        name
+        description
+        rank
+        isMediaSpoiler
+        isGeneralSpoiler
+        userId
+      }
+      mediaListEntry {
+        id
+        status
+        score
+      }
+      stats {
+        statusDistribution {
+          status
+          amount
+        }
+        scoreDistribution {
+          score
+          amount
+        }
+      }
+    }
+  }
+`);
 
 export default function Media(props: { id: number }) {
   const searchParams = useSearchParams();
 
-  const { loading, error, data } = useQuery<Media>(GET_MEDIA, {
+  const { loading, error, data } = useQuery(GetMedia, {
     variables: {
       id: props.id,
-      type: searchParams.get("type") ?? "",
+      type: searchParams.get("type") as MediaType,
       isAdult: searchParams.get("isAdult") === "true",
     },
   });
   if (loading) {
-    return <Loading className='w-screen h-screen' />;
+    return;
   }
   if (error) {
     throw error;
   }
-  if (!data) {
-    return <div>no data</div>;
-  }
-  const media = data.Media;
   return (
     <>
       <Image
-        alt={media.title.native}
+        alt={data?.Media?.title?.native ?? ""}
         width={"100%"}
-        src={media.bannerImage}
+        src={data?.Media?.bannerImage ?? ""}
         radius='none'
         className='h-48 md:h-auto md:max-h-96 object-cover'
       ></Image>
       <div className='max-w-5xl mx-auto flex flex-col items-center justify-center'>
-        <div className='flex gap-3'>
+        <div className='flex'>
           <Image
-            alt={media.title.native}
-            src={media.coverImage.large}
+            alt={data?.Media?.title?.native ?? ""}
+            src={data?.Media?.coverImage?.large ?? ""}
             radius='none'
-            className='relative -top-1/3 object-cover w-40'
+            className='relative -top-32 object-cover w-40 p-3'
           ></Image>
-          <div className='flex-1 p-3'>
-            <h1>{media.title.native}</h1>
+          <div className='flex-1 p-3 hidden md:block'>
+            <h1>{data?.Media?.title?.native}</h1>
             <div
-              className='text-xs mt-3'
-              dangerouslySetInnerHTML={{ __html: media.description }}
+              className='text-xs mt-3 h-32 overflow-hidden text-ellipsis'
+              dangerouslySetInnerHTML={{
+                __html: data?.Media?.description ?? "",
+              }}
             />
           </div>
         </div>
