@@ -22,6 +22,8 @@ export function MediaItem(props: { media: FragmentType<typeof HomeMedia> }) {
           alt={media.title?.native ?? ""}
           src={media.coverImage?.extraLarge ?? ""}
           className='object-cover'
+          height={256}
+          width={178}
         />
         <p className='text-xs md:text-sm font-bold my-auto text-center p-3'>
           {media.title?.native}
