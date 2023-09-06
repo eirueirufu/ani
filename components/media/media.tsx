@@ -28,7 +28,7 @@ export default function Media(props: { id: number }) {
 
   return (
     <>
-      {data?.Media?.bannerImage && (
+      {data?.Media?.bannerImage ? (
         <Image
           alt={data?.Media?.title?.native ?? ""}
           width={"100%"}
@@ -36,6 +36,8 @@ export default function Media(props: { id: number }) {
           radius='none'
           className='h-48 md:h-auto md:max-h-96 object-cover'
         ></Image>
+      ) : (
+        <div className='h-16'></div>
       )}
       <div className='max-w-5xl mx-auto flex flex-col items-center justify-center gap-3 p-3'>
         <div className='w-full'>
