@@ -12,7 +12,7 @@ export function MediaOverviewRecommendations(props: {
 
   return (
     <div className='w-full'>
-      <p>TRAILER</p>
+      <p>RECOMMENDATIONS</p>
       <div className='grid grid-cols-3 md:grid-cols-6 gap-6'>
         {recommendations.nodes?.map((item, index) => {
           return (
