@@ -141,8 +141,7 @@ export const GetMedia = graphql(/* GraphQL */ `
         url
       }
       trailer {
-        id
-        site
+        ...GetMediaOverviewTrailer
       }
       rankings {
         id
@@ -249,5 +248,12 @@ export const GetMediaOverviewStaffs = graphql(/* GraphQL */ `
         }
       }
     }
+  }
+`);
+
+export const GetMediaOverviewTrailer = graphql(/* GraphQL */ `
+  fragment GetMediaOverviewTrailer on MediaTrailer {
+    id
+    site
   }
 `);

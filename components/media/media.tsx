@@ -8,6 +8,7 @@ import { MediaOverviewRelations } from "./mediaOverviewRelations";
 import { GetMedia } from "./gql";
 import { MediaOverviewCharacters } from "./mediaOverviewCharacters";
 import { MediaOverviewStaffs } from "./mediaOverviewStaffs";
+import { MediaOverviewTrailer } from "./mediaOverviewTrailer";
 
 export default function Media(props: { id: number }) {
   const searchParams = useSearchParams();
@@ -63,13 +64,16 @@ export default function Media(props: { id: number }) {
         </div>
 
         {data?.Media?.relations && (
-          <MediaOverviewRelations relations={data?.Media?.relations} />
+          <MediaOverviewRelations relations={data.Media.relations} />
         )}
         {data?.Media?.characterPreview && (
-          <MediaOverviewCharacters characters={data?.Media?.characterPreview} />
+          <MediaOverviewCharacters characters={data.Media.characterPreview} />
         )}
         {data?.Media?.staffPreview && (
-          <MediaOverviewStaffs staffs={data?.Media?.staffPreview} />
+          <MediaOverviewStaffs staffs={data.Media.staffPreview} />
+        )}
+        {data?.Media?.trailer && (
+          <MediaOverviewTrailer trailer={data.Media.trailer} />
         )}
       </div>
     </>
