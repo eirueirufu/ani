@@ -7,6 +7,7 @@ import { MediaType } from "@/lib/aniList/graphql";
 import { MediaOverviewRelations } from "./mediaOverviewRelations";
 import { GetMedia } from "./gql";
 import { MediaOverviewCharacters } from "./mediaOverviewCharacters";
+import { MediaOverviewStaffs } from "./mediaOverviewStaffs";
 
 export default function Media(props: { id: number }) {
   const searchParams = useSearchParams();
@@ -66,6 +67,9 @@ export default function Media(props: { id: number }) {
         )}
         {data?.Media?.characterPreview && (
           <MediaOverviewCharacters characters={data?.Media?.characterPreview} />
+        )}
+        {data?.Media?.staffPreview && (
+          <MediaOverviewStaffs staffs={data?.Media?.staffPreview} />
         )}
       </div>
     </>

@@ -64,20 +64,7 @@ export const GetMedia = graphql(/* GraphQL */ `
         ...GetMediaOverviewCharacters
       }
       staffPreview: staff(perPage: 8, sort: [RELEVANCE, ID]) {
-        edges {
-          id
-          role
-          node {
-            id
-            name {
-              userPreferred
-            }
-            language: languageV2
-            image {
-              large
-            }
-          }
-        }
+        ...GetMediaOverviewStaffs
       }
       studios {
         edges {
@@ -238,6 +225,25 @@ export const GetMediaOverviewCharacters = graphql(/* GraphQL */ `
         name {
           userPreferred
         }
+        image {
+          large
+        }
+      }
+    }
+  }
+`);
+
+export const GetMediaOverviewStaffs = graphql(/* GraphQL */ `
+  fragment GetMediaOverviewStaffs on StaffConnection {
+    edges {
+      id
+      role
+      node {
+        id
+        name {
+          userPreferred
+        }
+        language: languageV2
         image {
           large
         }
