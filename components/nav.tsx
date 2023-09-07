@@ -10,10 +10,13 @@ import {
   Button,
 } from "@nextui-org/react";
 import { ThemeSwitcher } from "./themeSwitcher";
+import { usePathname } from "next/navigation";
 
-export default function Nav({ className }: React.HTMLAttributes<"div">) {
+export default function Nav() {
+  const pathname = usePathname();
+  const position = pathname.startsWith("/media/") ? "fixed" : "";
   return (
-    <Navbar isBordered className={className}>
+    <Navbar isBordered className={position}>
       <NavbarBrand>
         <AcmeLogo />
         <p className='font-bold text-inherit'>ACME</p>

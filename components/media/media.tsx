@@ -35,6 +35,7 @@ export default function Media(props: { id: number }) {
           src={data?.Media?.bannerImage}
           radius='none'
           className='h-48 md:h-auto md:max-h-96 object-cover'
+          height={320}
         ></Image>
       ) : (
         <div className='h-16'></div>
@@ -45,7 +46,9 @@ export default function Media(props: { id: number }) {
             alt={data?.Media?.title?.native ?? ""}
             src={data?.Media?.coverImage?.large ?? ""}
             radius='none'
-            className='object-cover w-40 float-left mr-3 mb-3'
+            width={160}
+            height={240}
+            className='object-cover float-left mr-3 mb-3'
           ></Image>
           <div className='flex-1 md:block'>
             <h1>{data?.Media?.title?.native}</h1>
