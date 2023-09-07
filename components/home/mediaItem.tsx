@@ -17,7 +17,7 @@ export function MediaItem(props: { media: FragmentType<typeof HomeMedia> }) {
         );
       }}
     >
-      <CardBody className='p-0'>
+      <CardBody className='p-0 items-center'>
         <Image
           alt={media.title?.native ?? ""}
           src={media.coverImage?.extraLarge ?? ""}

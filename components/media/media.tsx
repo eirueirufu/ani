@@ -9,6 +9,7 @@ import { GetMedia } from "./gql";
 import { MediaOverviewCharacters } from "./mediaOverviewCharacters";
 import { MediaOverviewStaffs } from "./mediaOverviewStaffs";
 import { MediaOverviewTrailer } from "./mediaOverviewTrailer";
+import { MediaOverviewRecommendations } from "./mediaOverviewRecommedations";
 
 export default function Media(props: { id: number }) {
   const searchParams = useSearchParams();
@@ -74,6 +75,11 @@ export default function Media(props: { id: number }) {
         )}
         {data?.Media?.trailer && (
           <MediaOverviewTrailer trailer={data.Media.trailer} />
+        )}
+        {data?.Media?.recommendations && (
+          <MediaOverviewRecommendations
+            recommendations={data.Media.recommendations}
+          />
         )}
       </div>
     </>

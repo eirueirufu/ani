@@ -93,35 +93,8 @@ export const GetMedia = graphql(/* GraphQL */ `
           }
         }
       }
-      recommendations(perPage: 7, sort: [RATING_DESC, ID]) {
-        pageInfo {
-          total
-        }
-        nodes {
-          id
-          rating
-          userRating
-          mediaRecommendation {
-            id
-            title {
-              userPreferred
-            }
-            format
-            type
-            status(version: 2)
-            bannerImage
-            coverImage {
-              large
-            }
-          }
-          user {
-            id
-            name
-            avatar {
-              large
-            }
-          }
-        }
+      recommendations(perPage: 6, sort: [RATING_DESC, ID]) {
+        ...GetMediaOverviewRecommendations
       }
       externalLinks {
         id
@@ -255,5 +228,38 @@ export const GetMediaOverviewTrailer = graphql(/* GraphQL */ `
   fragment GetMediaOverviewTrailer on MediaTrailer {
     id
     site
+  }
+`);
+
+export const GetMediaOverviewRecommendations = graphql(/* GraphQL */ `
+  fragment GetMediaOverviewRecommendations on RecommendationConnection {
+    pageInfo {
+      total
+    }
+    nodes {
+      id
+      rating
+      userRating
+      mediaRecommendation {
+        id
+        title {
+          userPreferred
+        }
+        format
+        type
+        status(version: 2)
+        bannerImage
+        coverImage {
+          large
+        }
+      }
+      user {
+        id
+        name
+        avatar {
+          large
+        }
+      }
+    }
   }
 `);
