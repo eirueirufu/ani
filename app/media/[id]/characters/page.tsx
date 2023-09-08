@@ -4,7 +4,7 @@ import { graphql } from "@/lib/aniList";
 import { useQuery } from "@apollo/client";
 import { Card, CardBody, Image } from "@nextui-org/react";
 
-export const GetMediaCharacters = graphql(`
+const GetMediaCharacters = graphql(`
   query media($id: Int, $page: Int) {
     Media(id: $id) {
       id
