@@ -1,19 +1,34 @@
 "use client";
 
 import { useQuery } from "@apollo/client";
-import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  Image,
+  Tab,
+  Tabs,
+} from "@nextui-org/react";
+import {
+  usePathname,
+  useRouter,
+  useSearchParams,
+  useSelectedLayoutSegment,
+} from "next/navigation";
 import { MediaType } from "@/lib/aniList/graphql";
-import { MediaOverviewRelations } from "./mediaOverviewRelations";
 import { GetMedia } from "./gql";
-import { MediaOverviewCharacters } from "./mediaOverviewCharacters";
-import { MediaOverviewStaffs } from "./mediaOverviewStaffs";
-import { MediaOverviewTrailer } from "./mediaOverviewTrailer";
-import { MediaOverviewRecommendations } from "./mediaOverviewRecommedations";
+import { ReactNode } from "react";
+import Link from "next/link";
 
-export default function Media(props: { id: number }) {
+export default function MediaLayout(props: {
+  id: number;
+  children: ReactNode;
+}) {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const path = usePathname();
+  const segament = useSelectedLayoutSegment();
 
   const { loading, error, data } = useQuery(GetMedia, {
     variables: {
@@ -61,6 +76,42 @@ export default function Media(props: { id: number }) {
               }}
             />
           </div>
+        </div>
+        <div className='grid grid-cols-3 py-3 items-center justify-center'>
+          <Button
+            radius='none'
+            isDisabled={!segament}
+            variant='flat'
+            onClick={() => {
+              router.push(`/media/${props.id}?${searchParams.toString()}`);
+            }}
+          >
+            Overview
+          </Button>
+          <Button
+            radius='none'
+            isDisabled={segament === "characters"}
+            variant='flat'
+            onClick={() => {
+              router.push(
+                `/media/${props.id}/characters?${searchParams.toString()}`
+              );
+            }}
+          >
+            Characters
+          </Button>
+          <Button
+            radius='none'
+            isDisabled={segament === "staff"}
+            variant='flat'
+            onClick={() => {
+              router.push(
+                `/media/${props.id}/staff?${searchParams.toString()}`
+              );
+            }}
+          >
+            Staff
+          </Button>
         </div>
         <div className='flex flex-col md:flex-row gap-3'>
           <div className='flex flex-row md:flex-col gap-3 p-3 whitespace-nowrap overflow-scroll md:overflow-visible'>
@@ -163,27 +214,7 @@ export default function Media(props: { id: number }) {
               </div>
             )}
           </div>
-          <div className='flex flex-col items-center justify-center gap-3'>
-            {data?.Media?.relations && (
-              <MediaOverviewRelations relations={data.Media.relations} />
-            )}
-            {data?.Media?.characterPreview && (
-              <MediaOverviewCharacters
-                characters={data.Media.characterPreview}
-              />
-            )}
-            {data?.Media?.staffPreview && (
-              <MediaOverviewStaffs staffs={data.Media.staffPreview} />
-            )}
-            {data?.Media?.trailer && (
-              <MediaOverviewTrailer trailer={data.Media.trailer} />
-            )}
-            {data?.Media?.recommendations && (
-              <MediaOverviewRecommendations
-                recommendations={data.Media.recommendations}
-              />
-            )}
-          </div>
+          <div className='w-full'>{props.children}</div>
         </div>
       </div>
     </>
