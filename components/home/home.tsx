@@ -139,7 +139,7 @@ export default function Home() {
         <div className='container mx-auto max-w-6xl p-3'>
           <div className='flex justify-between items-center'>
             <h1 className='font-bold text-2xl my-3'>TRENDING NOW</h1>
-            <Link href={"#"}>
+            <Link href={"/search"}>
               <p className='font-bold text-xs'>VLEW ALL →</p>
             </Link>
           </div>

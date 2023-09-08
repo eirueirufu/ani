@@ -10,13 +10,20 @@ import {
   Button,
 } from "@nextui-org/react";
 import { ThemeSwitcher } from "./themeSwitcher";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Nav() {
+  const router = useRouter();
   const pathname = usePathname();
   const position = pathname.startsWith("/media/") ? "fixed" : "";
   return (
-    <Navbar isBordered className={position}>
+    <Navbar
+      isBordered
+      className={position}
+      onClick={() => {
+        router.push("/");
+      }}
+    >
       <NavbarBrand>
         <AcmeLogo />
         <p className='font-bold text-inherit'>ACME</p>
