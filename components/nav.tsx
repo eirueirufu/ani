@@ -17,14 +17,12 @@ export default function Nav() {
   const pathname = usePathname();
   const position = pathname.startsWith("/media/") ? "fixed" : "";
   return (
-    <Navbar
-      isBordered
-      className={position}
-      onClick={() => {
-        router.push("/");
-      }}
-    >
-      <NavbarBrand>
+    <Navbar isBordered className={position}>
+      <NavbarBrand
+        onClick={() => {
+          router.push("/");
+        }}
+      >
         <AcmeLogo />
         <p className='font-bold text-inherit'>ACME</p>
       </NavbarBrand>
