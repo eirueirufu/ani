@@ -5,6 +5,7 @@ import {
   CardBody,
   Chip,
   Input,
+  Pagination,
   Select,
   SelectItem,
   SelectSection,
@@ -154,6 +155,7 @@ const GetSearch = graphql(`
 `);
 
 export default function Page() {
+  const [page, setPage] = useState(1);
   const [text, setText] = useState("");
   const [search, setSearch] = useState("");
   const [searchGenres, setSearchGenres] = useState<Selection>(new Set([]));
@@ -174,6 +176,7 @@ export default function Page() {
 
   const { loading, error, data } = useQuery(GetSearch, {
     variables: {
+      page: page,
       search: search.length > 0 ? search : undefined,
       genres: conv(searchGenres),
       year: convOne(searchYear),
@@ -329,6 +332,15 @@ export default function Page() {
           );
         })}
       </div>
+      <Pagination
+        isCompact
+        showControls
+        total={data?.Page?.pageInfo?.total ?? 0}
+        initialPage={1}
+        page={page}
+        onChange={setPage}
+        className='flex justify-center m-3'
+      />
     </>
   );
 }
