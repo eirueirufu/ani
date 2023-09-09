@@ -20,7 +20,9 @@ export function MediaOverviewStaffs(props: {
               radius='none'
               isPressable
               isHoverable
-              onClick={() => {}}
+              onClick={() => {
+                router.push(`/staff/${item?.node?.id}`);
+              }}
             >
               <CardBody className='p-0 flex flex-row justify-between'>
                 <div className='flex items-center justify-start shrink-0'>

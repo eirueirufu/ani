@@ -3,6 +3,7 @@
 import { graphql } from "@/lib/aniList";
 import { useQuery } from "@apollo/client";
 import { Card, CardBody, Image } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 
 const GetMediaStaff = graphql(`
   query GetMediaStaff($id: Int, $page: Int) {
@@ -35,6 +36,8 @@ const GetMediaStaff = graphql(`
 `);
 
 export default function Page({ params }: { params: { id: number } }) {
+  const router = useRouter();
+
   const { loading, error, data } = useQuery(GetMediaStaff, {
     variables: {
       id: params.id,
@@ -57,7 +60,9 @@ export default function Page({ params }: { params: { id: number } }) {
             radius='none'
             isPressable
             isHoverable
-            onClick={() => {}}
+            onClick={() => {
+              router.push(`/staff/${item?.node?.id}`);
+            }}
           >
             <CardBody className='p-0 flex flex-row justify-between'>
               <div className='flex items-center justify-start shrink-0'>
