@@ -1,9 +1,26 @@
 "use client";
 
-import { Input, Select, SelectItem, SelectSection } from "@nextui-org/react";
+import {
+  Card,
+  CardBody,
+  Chip,
+  Input,
+  Select,
+  SelectItem,
+  SelectSection,
+  Selection,
+} from "@nextui-org/react";
 import { graphql } from "@/lib/aniList";
-import { useState } from "react";
-import { MediaFormat, MediaSeason, MediaStatus } from "@/lib/aniList/graphql";
+import { useEffect, useRef, useState } from "react";
+import {
+  InputMaybe,
+  MediaFormat,
+  MediaSeason,
+  MediaStatus,
+} from "@/lib/aniList/graphql";
+import { useQuery } from "@apollo/client";
+import Loading from "@/components/loading";
+import Image from "next/image";
 
 const GetSearch = graphql(`
   query GetSearch(
@@ -137,10 +154,44 @@ const GetSearch = graphql(`
 `);
 
 export default function Page() {
+  const [text, setText] = useState("");
+  const [search, setSearch] = useState("");
+  const [searchGenres, setSearchGenres] = useState<Selection>(new Set([]));
+  const [searchYear, setSearchYear] = useState<Selection>(new Set([]));
+  const [searchSeason, setSearchSeason] = useState<Selection>(new Set([]));
+  const [searchFotmat, setSearchFormat] = useState<Selection>(new Set([]));
+  const [searchStatus, setSearchStatus] = useState<Selection>(new Set([]));
+
+  const timeout = useRef<NodeJS.Timeout | undefined>();
+  useEffect(() => {
+    if (!!timeout.current) {
+      clearTimeout(timeout.current);
+    }
+    timeout.current = setTimeout(() => {
+      setSearch(text);
+    }, 500);
+  }, [text]);
+
+  const { loading, error, data } = useQuery(GetSearch, {
+    variables: {
+      search: search.length > 0 ? search : undefined,
+      genres: conv(searchGenres),
+      year: convOne(searchYear),
+      season: convOne(searchSeason) as InputMaybe<MediaSeason>,
+      format: convOne(searchFotmat) as InputMaybe<MediaFormat>,
+      status: convOne(searchStatus) as InputMaybe<MediaStatus>,
+    },
+  });
+  if (loading) {
+    return <Loading className='w-full h-96' />;
+  }
+  if (error) {
+    throw error;
+  }
   return (
     <>
       <div className='w-full my-6 grid grid-cols-3 md:grid-cols-6 gap-3'>
-        <Input label='Search' size='sm' />
+        <Input label='Search' size='sm' value={text} onValueChange={setText} />
         <Select
           label='Genres'
           size='sm'
@@ -148,6 +199,8 @@ export default function Page() {
           selectionMode='multiple'
           className='max-w-xs'
           placeholder='Select'
+          selectedKeys={searchGenres}
+          onSelectionChange={setSearchGenres}
         >
           <SelectSection showDivider title='genres'>
             {genres.map((item) => {
@@ -166,6 +219,8 @@ export default function Page() {
           size='sm'
           isMultiline={true}
           className='max-w-xs'
+          selectedKeys={searchYear}
+          onSelectionChange={setSearchYear}
         >
           {years.map((item) => {
             return <SelectItem key={item}>{item}</SelectItem>;
@@ -176,6 +231,8 @@ export default function Page() {
           placeholder='Select'
           size='sm'
           className='max-w-xs'
+          selectedKeys={searchSeason}
+          onSelectionChange={setSearchSeason}
         >
           {Object.values(MediaSeason).map((item) => {
             return (
@@ -190,6 +247,8 @@ export default function Page() {
           placeholder='Select'
           size='sm'
           className='max-w-xs'
+          selectedKeys={searchFotmat}
+          onSelectionChange={setSearchFormat}
         >
           {Object.values(MediaFormat).map((item) => {
             return (
@@ -204,6 +263,8 @@ export default function Page() {
           placeholder='Select'
           size='sm'
           className='max-w-xs'
+          selectedKeys={searchStatus}
+          onSelectionChange={setSearchStatus}
         >
           {Object.values(MediaStatus).map((item) => {
             return (
@@ -214,8 +275,93 @@ export default function Page() {
           })}
         </Select>
       </div>
+      <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+        {data?.Page?.media?.map((item, index) => {
+          return (
+            <div key={index}>
+              <Card radius='none'>
+                <CardBody className='p-0 flex flex-row h-[192px]'>
+                  <div className='relative w-[128px] h-full shrink-0'>
+                    <Image
+                      alt={item?.title?.userPreferred ?? ""}
+                      src={item?.coverImage?.large ?? ""}
+                      height={192}
+                      width={128}
+                      className='object-cover h-full'
+                    ></Image>
+                    <p className='absolute w-full bottom-0 bg-slate-200/75 dark:bg-slate-800/75'>
+                      {item?.title?.userPreferred}
+                    </p>
+                  </div>
+                  <div className='flex flex-col flex-1 overflow-auto'>
+                    <div className='p-3 overflow-y-scroll flex-1'>
+                      <h1>{item?.seasonYear}</h1>
+                      <h2>{`${item?.format}·${item?.episodes} episode·${item?.duration} mins`}</h2>
+                      <p
+                        className='text-xs mt-3'
+                        dangerouslySetInnerHTML={{
+                          __html: item?.description ?? "",
+                        }}
+                      />
+                    </div>
+                    <div className='flex p-3 gap-2 overflow-x-auto'>
+                      {item?.genres?.map((genre, index) => {
+                        return (
+                          <Chip
+                            key={index}
+                            style={{
+                              backgroundColor: `${item?.coverImage?.color}`,
+                            }}
+                            size='sm'
+                            className='flex-shrink-0'
+                          >
+                            <p className='text-xs dark:mix-blend-difference'>
+                              {genre}
+                            </p>
+                          </Chip>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+            </div>
+          );
+        })}
+      </div>
     </>
   );
+}
+
+function conv(selection: Selection) {
+  if (selection === "all") {
+    return undefined;
+  }
+  const arr = Array.from(selection);
+  if (arr.length === 0) {
+    return undefined;
+  }
+  return arr.map((item) => {
+    if (typeof item !== "string") {
+      return "";
+    }
+    return item;
+  });
+}
+
+function convOne(selection: Selection) {
+  if (selection === "all") {
+    return undefined;
+  }
+  const list = Array.from(selection);
+  if (list.length === 0) {
+    return undefined;
+  }
+  const item = list[0];
+  if (typeof item !== "string") {
+    return undefined;
+  }
+  return item;
 }
 
 const genres = [
