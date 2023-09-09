@@ -15,13 +15,7 @@ export function MediaOverviewCharacters(props: {
       <div className='grid grid-cols-2 md:grid-cols-3 gap-3'>
         {characters?.edges?.map((item, index) => {
           return (
-            <Card
-              key={index}
-              radius='none'
-              isPressable
-              isHoverable
-              onClick={() => {}}
-            >
+            <Card key={index} radius='none' isHoverable onClick={() => {}}>
               <CardBody className='p-0 flex flex-row justify-between'>
                 <div className='flex items-center justify-start shrink-0'>
                   <Image
@@ -47,6 +41,9 @@ export function MediaOverviewCharacters(props: {
                       <div
                         key={index}
                         className='flex items-center justify-end h-full'
+                        onClick={() => {
+                          router.push(`/staff/${item?.id}`);
+                        }}
                       >
                         <div className='flex flex-col justify-between h-full p-3'>
                           <p className='text-right text-xs w-24 overflow-hidden whitespace-nowrap text-ellipsis'>

@@ -138,9 +138,9 @@ export default function Page({ params }: { params: { id: number } }) {
   }
 
   return (
-    <div className='flex flex-col p-5'>
-      <div className='flex flex-col md:flex-row gap-5 max-w-5xl self-center'>
-        <div className='shrink-0 self-center'>
+    <div className='flex flex-col p-5 w-full'>
+      <div className='flex flex-col md:flex-row gap-5 w-full max-w-5xl self-center'>
+        <div className='shrink-0 self-center md:self-auto'>
           <Image
             alt={data?.Staff?.name?.full ?? ""}
             src={data?.Staff?.image?.large ?? ""}

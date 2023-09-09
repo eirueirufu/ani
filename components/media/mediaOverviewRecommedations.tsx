@@ -1,10 +1,13 @@
 import { graphql, useFragment, FragmentType } from "@/lib/aniList";
 import { GetMediaOverviewRecommendations } from "./gql";
 import { Card, CardBody, Image } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 
 export function MediaOverviewRecommendations(props: {
   recommendations: FragmentType<typeof GetMediaOverviewRecommendations>;
 }) {
+  const router = useRouter();
+
   const recommendations = useFragment(
     GetMediaOverviewRecommendations,
     props.recommendations
@@ -21,7 +24,12 @@ export function MediaOverviewRecommendations(props: {
               shadow='none'
               isPressable
               isHoverable
-              onClick={() => {}}
+              onClick={() => {
+                router.push(
+                  `/media/${item?.mediaRecommendation?.id}?type=${item
+                    ?.mediaRecommendation?.type}&isAdult=${false}`
+                );
+              }}
             >
               <CardBody className='p-0 items-center'>
                 <Image
