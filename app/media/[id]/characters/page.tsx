@@ -90,7 +90,7 @@ export default function Page({ params }: { params: { id: number } }) {
                   </p>
                 </div>
               </div>
-              <div className='hidden md:flex items-center justify-end shrink-0'>
+              <div className='flex items-center justify-end shrink-0'>
                 {item?.voiceActorRoles?.map((item, index) => {
                   return (
                     <div
