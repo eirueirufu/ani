@@ -335,7 +335,7 @@ export default function Page() {
       <Pagination
         isCompact
         showControls
-        total={data?.Page?.pageInfo?.total ?? 0}
+        total={data?.Page?.pageInfo?.lastPage ?? 1}
         initialPage={1}
         page={page}
         onChange={setPage}
