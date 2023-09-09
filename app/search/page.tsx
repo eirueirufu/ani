@@ -22,6 +22,7 @@ import {
 import { useQuery } from "@apollo/client";
 import Loading from "@/components/loading";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const GetSearch = graphql(`
   query GetSearch(
@@ -155,6 +156,8 @@ const GetSearch = graphql(`
 `);
 
 export default function Page() {
+  const router = useRouter();
+
   const [page, setPage] = useState(1);
   const [text, setText] = useState("");
   const [search, setSearch] = useState("");
@@ -181,13 +184,10 @@ export default function Page() {
       genres: conv(searchGenres),
       year: convOne(searchYear),
       season: convOne(searchSeason) as InputMaybe<MediaSeason>,
-      format: convOne(searchFotmat) as InputMaybe<MediaFormat>,
+      format: conv(searchFotmat) as InputMaybe<Array<InputMaybe<MediaFormat>>>,
       status: convOne(searchStatus) as InputMaybe<MediaStatus>,
     },
   });
-  if (loading) {
-    return <Loading className='w-full h-96' />;
-  }
   if (error) {
     throw error;
   }
@@ -249,6 +249,8 @@ export default function Page() {
           label='Format'
           placeholder='Select'
           size='sm'
+          isMultiline={true}
+          selectionMode='multiple'
           className='max-w-xs'
           selectedKeys={searchFotmat}
           onSelectionChange={setSearchFormat}
@@ -278,57 +280,68 @@ export default function Page() {
           })}
         </Select>
       </div>
+      {loading && <Loading className='w-full h-96' />}
       <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
         {data?.Page?.media?.map((item, index) => {
           return (
-            <div key={index}>
-              <Card radius='none'>
-                <CardBody className='p-0 flex flex-row h-[192px]'>
-                  <div className='relative w-[128px] h-full shrink-0'>
-                    <Image
-                      alt={item?.title?.userPreferred ?? ""}
-                      src={item?.coverImage?.large ?? ""}
-                      height={192}
-                      width={128}
-                      className='object-cover h-full'
-                    ></Image>
-                    <p className='absolute w-full bottom-0 bg-slate-200/75 dark:bg-slate-800/75'>
-                      {item?.title?.userPreferred}
-                    </p>
+            <Card
+              key={index}
+              radius='none'
+              isPressable
+              isHoverable
+              onClick={() => {
+                router.push(
+                  `/media/${item?.id}?type=${item?.type}&isAdult=${
+                    item?.isAdult ?? false
+                  }`
+                );
+              }}
+            >
+              <CardBody className='p-0 flex flex-row h-[192px]'>
+                <div className='relative w-[128px] h-full shrink-0'>
+                  <Image
+                    alt={item?.title?.userPreferred ?? ""}
+                    src={item?.coverImage?.large ?? ""}
+                    height={192}
+                    width={128}
+                    className='object-cover h-full'
+                  ></Image>
+                  <p className='absolute w-full bottom-0 bg-slate-200/75 dark:bg-slate-800/75'>
+                    {item?.title?.userPreferred}
+                  </p>
+                </div>
+                <div className='flex flex-col flex-1 overflow-auto'>
+                  <div className='p-3 overflow-y-scroll flex-1'>
+                    <h1>{item?.seasonYear}</h1>
+                    <h2>{`${item?.format}·${item?.episodes} episode·${item?.duration} mins`}</h2>
+                    <p
+                      className='text-xs mt-3'
+                      dangerouslySetInnerHTML={{
+                        __html: item?.description ?? "",
+                      }}
+                    />
                   </div>
-                  <div className='flex flex-col flex-1 overflow-auto'>
-                    <div className='p-3 overflow-y-scroll flex-1'>
-                      <h1>{item?.seasonYear}</h1>
-                      <h2>{`${item?.format}·${item?.episodes} episode·${item?.duration} mins`}</h2>
-                      <p
-                        className='text-xs mt-3'
-                        dangerouslySetInnerHTML={{
-                          __html: item?.description ?? "",
-                        }}
-                      />
-                    </div>
-                    <div className='flex p-3 gap-2 overflow-x-auto'>
-                      {item?.genres?.map((genre, index) => {
-                        return (
-                          <Chip
-                            key={index}
-                            style={{
-                              backgroundColor: `${item?.coverImage?.color}`,
-                            }}
-                            size='sm'
-                            className='flex-shrink-0'
-                          >
-                            <p className='text-xs dark:mix-blend-difference'>
-                              {genre}
-                            </p>
-                          </Chip>
-                        );
-                      })}
-                    </div>
+                  <div className='flex p-3 gap-2 overflow-x-auto'>
+                    {item?.genres?.map((genre, index) => {
+                      return (
+                        <Chip
+                          key={index}
+                          style={{
+                            backgroundColor: `${item?.coverImage?.color}`,
+                          }}
+                          size='sm'
+                          className='flex-shrink-0'
+                        >
+                          <p className='text-xs dark:mix-blend-difference'>
+                            {genre}
+                          </p>
+                        </Chip>
+                      );
+                    })}
                   </div>
-                </CardBody>
-              </Card>
-            </div>
+                </div>
+              </CardBody>
+            </Card>
           );
         })}
       </div>

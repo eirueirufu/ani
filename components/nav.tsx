@@ -19,6 +19,7 @@ export default function Nav() {
   return (
     <Navbar isBordered className={position}>
       <NavbarBrand
+        className='cursor-pointer'
         onClick={() => {
           router.push("/");
         }}
