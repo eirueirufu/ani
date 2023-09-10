@@ -11,8 +11,7 @@ import {
 } from "@nextui-org/react";
 import { ThemeSwitcher } from "./themeSwitcher";
 import { usePathname, useRouter } from "next/navigation";
-import { GithubLogo, Video } from "@phosphor-icons/react";
-import Image from "next/image";
+import { GithubLogo, House } from "@phosphor-icons/react";
 
 export default function Nav() {
   const router = useRouter();
@@ -26,7 +25,7 @@ export default function Nav() {
           router.push("/");
         }}
       >
-        <Video size={32} weight='bold' />
+        <House size={32} weight='bold' />
       </NavbarBrand>
       <NavbarContent
         className='hidden sm:flex gap-4'
