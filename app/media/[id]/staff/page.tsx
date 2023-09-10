@@ -61,7 +61,7 @@ export default function Page({ params }: { params: { id: number } }) {
             isPressable
             isHoverable
             onClick={() => {
-              router.push(`/staff/${item?.node?.id}`);
+              router.push(`/staff/${item?.node?.id}/staffRoles`);
             }}
           >
             <CardBody className='p-0 flex flex-row justify-between'>

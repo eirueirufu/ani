@@ -8,7 +8,7 @@ import { useState } from "react";
 import { Pagination, Image, Card, CardBody } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 
-export function StaffMedia(props: { id: number }) {
+export function CharacterRoles(props: { id: number }) {
   const router = useRouter();
 
   const [page, setPage] = useState(1);

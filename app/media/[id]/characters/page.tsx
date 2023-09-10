@@ -97,7 +97,9 @@ export default function Page({ params }: { params: { id: number } }) {
                       key={index}
                       className='flex items-center justify-end h-full'
                       onClick={() => {
-                        router.push(`/staff/${item?.voiceActor?.id}`);
+                        router.push(
+                          `/staff/${item?.voiceActor?.id}/characterRoles`
+                        );
                       }}
                     >
                       <div className='flex flex-col justify-between h-full p-3'>

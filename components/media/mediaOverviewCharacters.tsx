@@ -42,7 +42,7 @@ export function MediaOverviewCharacters(props: {
                         key={index}
                         className='flex items-center justify-end h-full'
                         onClick={() => {
-                          router.push(`/staff/${item?.id}`);
+                          router.push(`/staff/${item?.id}/characterRoles`);
                         }}
                       >
                         <div className='flex flex-col justify-between h-full p-3'>
