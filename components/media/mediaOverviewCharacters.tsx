@@ -40,7 +40,7 @@ export function MediaOverviewCharacters(props: {
                     return (
                       <div
                         key={index}
-                        className='flex items-center justify-end h-full'
+                        className='flex items-center justify-end h-full cursor-pointer'
                         onClick={() => {
                           router.push(`/staff/${item?.id}/characterRoles`);
                         }}
