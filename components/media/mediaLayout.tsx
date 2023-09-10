@@ -114,7 +114,7 @@ export default function MediaLayout(props: {
           </Button>
         </div>
         <div className='flex flex-col md:flex-row gap-3'>
-          <div className='flex flex-row md:flex-col gap-3 p-3 whitespace-nowrap overflow-scroll md:overflow-visible'>
+          <div className='flex flex-row md:flex-col gap-3 p-3 whitespace-nowrap overflow-scroll md:overflow-auto md:max-w-xs'>
             {data?.Media?.nextAiringEpisode?.airingAt && (
               <div>
                 <p className='text-sm font-bold'>Airing</p>
