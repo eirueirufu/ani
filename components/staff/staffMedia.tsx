@@ -62,8 +62,8 @@ export function StaffMedia(props: { id: number }) {
                       key={index}
                       alt={item?.node?.title?.userPreferred ?? ""}
                       src={item?.node?.coverImage?.large ?? ""}
-                      width={96}
-                      height={128}
+                      width={72}
+                      height={108}
                       className='border'
                     />
                   </div>
