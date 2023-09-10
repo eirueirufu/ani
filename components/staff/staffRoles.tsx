@@ -64,7 +64,7 @@ export function StaffRoles(props: { id: number }) {
       <Pagination
         isCompact
         showControls
-        total={data?.Staff?.characterMedia?.pageInfo?.lastPage ?? 1}
+        total={data?.Staff?.staffMedia?.pageInfo?.lastPage ?? 1}
         initialPage={1}
         page={page}
         onChange={setPage}
