@@ -19,13 +19,15 @@ export default function Nav() {
   const position = pathname.startsWith("/media/") ? "fixed" : "";
   return (
     <Navbar isBordered className={position}>
-      <NavbarBrand
-        className='cursor-pointer'
-        onClick={() => {
-          router.push("/");
-        }}
-      >
-        <House size={32} weight='bold' />
+      <NavbarBrand>
+        <House
+          size={32}
+          weight='bold'
+          className='cursor-pointer'
+          onClick={() => {
+            router.push("/");
+          }}
+        />
       </NavbarBrand>
       <NavbarContent
         className='hidden sm:flex gap-4'
