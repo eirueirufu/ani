@@ -32,13 +32,13 @@ export function getMediaDate(): MediaDate {
 }
 
 export function getSeason(month: number) {
-  month = month % 13;
+  month = month % 12;
   let season = MediaSeason.Winter;
-  if (month <= 6) {
+  if (month < 6) {
     season = MediaSeason.Spring;
-  } else if (month <= 9) {
+  } else if (month < 9) {
     season = MediaSeason.Summer;
-  } else if (month <= 12) {
+  } else if (month < 12) {
     season = MediaSeason.Fall;
   }
   return season;
