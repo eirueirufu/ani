@@ -130,7 +130,7 @@ export default function Home() {
     throw error;
   }
   if (loading) {
-    return;
+    return <Loading className='w-full h-96' />;
   }
 
   return (

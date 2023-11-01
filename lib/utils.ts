@@ -20,7 +20,7 @@ export function getMediaDate(): MediaDate {
   const season = getSeason(month);
   const nextSeason = getSeason(month + 3);
   let nextYear = year;
-  if (nextSeason == MediaSeason.Winter) {
+  if (month + 3 > 11) {
     nextYear = year + 1;
   }
   return {
@@ -34,11 +34,11 @@ export function getMediaDate(): MediaDate {
 export function getSeason(month: number) {
   month = month % 12;
   let season: MediaSeason = MediaSeason.Winter;
-  if (month >= 1 && month <= 3) {
+  if (month >= 3 && month <= 5) {
     season = MediaSeason.Spring;
-  } else if (month >= 4 && month <= 6) {
+  } else if (month >= 6 && month <= 8) {
     season = MediaSeason.Summer;
-  } else if (month >= 7 && month <= 9) {
+  } else if (month >= 9 && month <= 11) {
     season = MediaSeason.Fall;
   }
   return season;

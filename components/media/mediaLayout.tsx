@@ -20,6 +20,7 @@ import { MediaType } from "@/lib/aniList/graphql";
 import { GetMedia } from "./gql";
 import { ReactNode } from "react";
 import Link from "next/link";
+import Loading from "../loading";
 
 export default function MediaLayout(props: {
   id: number;
@@ -38,7 +39,7 @@ export default function MediaLayout(props: {
     },
   });
   if (loading) {
-    return;
+    return <Loading className='w-full h-96' />;
   }
   if (error) {
     throw error;
